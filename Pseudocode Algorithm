@@ -1,0 +1,118 @@
+#Psuedocode Algorithm for BlockAcademia Project
+
+START
+# --- Blockchain Initialization ---
+Initialize Blockchain:
+    chain ← [Genesis Block]          # Start with a genesis block
+    transactions ← []                # Empty list of pending transactions
+    nodes ← {}                       # Set of peer nodes
+    node_id ← generate_unique_id()   # Unique identifier for this node
+Load OntarioTech PublicKey and PrivateKey
+Set CREDENTIAL_ISSUER_ID ← "Ontario Tech"
+
+# --- Wallet Generation ---
+FUNCTION generate_wallet():
+    private_key ← RSA.generate(2048)         # Generate secure RSA private key
+    public_key ← private_key.publickey()     # Derive public key
+    RETURN {private_key, public_key}         # Return key pair
+
+# --- Credential Issuance (Client Side) ---
+FUNCTION issue_credential(sender_public_key, sender_private_key, recipient_public_key, credential_type, issue_date):
+    credential_data ← {                      # Core credential info
+        sender_public_key,
+        recipient_public_key,
+        credential_type,
+        issue_date
+    }
+    credential_hash ← SHA256(credential_data)   # Create unique fingerprint
+    transaction_data ← {                        # Transaction payload
+        sender: sender_public_key,
+        recipient: recipient_public_key,
+        credential_type,
+        issue_date,
+        credential_hash
+    }
+    signature ← SIGN(transaction_data, sender_private_key)   # Sign with issuer’s private key
+    payload ← {                                              # Final package
+        sender_public_key,
+        recipient_public_key,
+        credential_type,
+        issue_date,
+        credential_hash,
+        signature
+    }
+    SEND payload TO blockchain_node("/credentials/new")       # Broadcast to blockchain
+
+# --- Blockchain Node: Accept New Credential ---
+FUNCTION new_credential(payload):
+    IF payload.sender_public_key ≠ ONTARIO_TECH_PUBLIC_KEY:   # Only trusted issuer allowed
+        RETURN "Unauthorized Issuer"
+    IF missing_required_fields(payload):                      # Ensure all fields present
+        RETURN "Missing values"
+    transaction ← {                                           # Build transaction object
+        sender,
+        recipient,
+        credential_type,
+        issue_date,
+        credential_hash,
+        signature
+    }
+    IF verify_signature(transaction) = TRUE:                  # Validate digital signature
+        ADD transaction TO transactions                       # Queue for next block
+        RETURN "Credential will be added to next block"
+    ELSE:
+        RETURN "Invalid transaction signature"
+
+# --- Mining and Block Creation ---
+FUNCTION mine_block():
+    last_block ← blockchain.last_block
+    nonce ← proof_of_work(last_block)                         # Solve PoW puzzle
+    reward_transaction ← {                                    # Reward miner
+        sender: "The Blockchain",
+        recipient: node_id,
+        credential_type: "MINING_REWARD",
+        issue_date: TODAY,
+        credential_hash: "REWARD_HASH",
+        signature: "0"
+    }
+    ADD reward_transaction TO transactions
+    new_block ← {                                             # Create new block
+        block_number,
+        timestamp,
+        transactions,
+        nonce,
+        previous_hash
+    }
+    ADD new_block TO chain                                    # Append to blockchain
+    RESET transactions                                        # Clear pending list
+    RETURN new_block
+
+# --- Credential Verification ---
+FUNCTION verify_credential(recipient_public_key, credential_hash):
+    FOR each block IN chain:                                  # Search all blocks
+        FOR each transaction IN block.transactions:
+            IF transaction.recipient = recipient_public_key AND
+               transaction.credential_hash = credential_hash:
+                IF transaction.sender ≠ ONTARIO_TECH_PUBLIC_KEY:
+                    RETURN "Credential found but issuer not trusted"
+                IF verify_signature(transaction) = TRUE:       # Confirm authenticity
+                    RETURN {
+                        is_valid: TRUE,
+                        issuer: CREDENTIAL_ISSUER_ID,
+                        credential_type,
+                        issue_date,
+                        transaction_id: SHA256(transaction)   # Unique transaction ID
+                    }
+                ELSE:
+                    RETURN "Signature verification failed"
+    RETURN "Credential not found"                             # No match in chain
+
+# --- Consensus Across Nodes ---
+FUNCTION resolve_conflicts():
+    FOR each node IN network:
+        chain ← GET node.chain                                # Fetch peer chain
+        IF length(chain) > length(local_chain) AND valid_chain(chain):
+            local_chain ← chain                               # Replace with longer valid chain
+            RETURN "Chain replaced"
+    RETURN "Local chain authoritative"                        # Keep current chain
+END
