@@ -1,12 +1,7 @@
-#Name: Kamal Lamey  || Nov-30,2025 || 3:11AM
-#The following modifications had to be performed in order to establish web app functionality:
-#- Previous hard-coded keys were corrupted. I Replace corrupted RSA keys with valid 2048-bit keypair
-#- Updated signature verification to accomodate keys being transferred  
-#- Update RSA import methods from deprecated importKey() to import_key()
-#- Updated field name mapping between client payload and backend storage
-#- Add debugging logging throughout credential flow in order to trace and correct key issue
-#- Remove dynamic key generation that caused client/backend mismatch
-
+#Name: Kamal Lamey  || Nov-30,2025 || 3:29PM
+#The following modifications had to be performed:
+#Remove unused code
+#Added Comments
 
 from flask import Flask, request, jsonify, render_template
 from time import time
@@ -32,11 +27,13 @@ import datetime  # I use this to timestamp mining reward transactions
 
 # Public Key (hex-encoded DER) for Ontario Tech
 # This key is public and used for verification only.
+#Kamal modified these keys due to debugging issues
 ONTARIO_TECH_PUBLIC_KEY = "30820122300d06092a864886f70d01010105000382010f003082010a02820101008e67a080eade2de2183721b307628a69b0027cfc7e29bc6ad6be484b0eab86777c1f0ecc6ab707a5714eacb980bf485ec771d388294e75f94e642ca89f54a16f4981041e00b2b8631f3850f2668b1256cfa1b70d8ed633bc4ca867c975f3e2a8674c13a27f23e86c3bfbeac2df4ef0343afdbef470fe2ddea0f3b252ac88fd6698f46a029a81afffab97cb4f93da13f7b7949a31f8c576ad104047388f6274c13cffe0c6232e238034e46d247e225897039c9e1722e5c22eaf8610aae874c4ad0c06a70d81678b0d2004bcbfdcbbc3c1a2313c38b326b80ac6362f75ffcda3364b6131d19b9a1b6ee52250086ecd92e480b35b7abf7d4c68f1da671570905c2d0203010001"
 
 # Private Key (hex-encoded DER) for Ontario Tech
 # WARNING: In a real deployment this key must NEVER live in the backend code like this.
 # I only keep it here to show the full issuer keypair for the course project.
+#Kamal modified these keys due to debugging issues
 ONTARIO_TECH_PRIVATE_KEY = "308204a402010002820101008e67a080eade2de2183721b307628a69b0027cfc7e29bc6ad6be484b0eab86777c1f0ecc6ab707a5714eacb980bf485ec771d388294e75f94e642ca89f54a16f4981041e00b2b8631f3850f2668b1256cfa1b70d8ed633bc4ca867c975f3e2a8674c13a27f23e86c3bfbeac2df4ef0343afdbef470fe2ddea0f3b252ac88fd6698f46a029a81afffab97cb4f93da13f7b7949a31f8c576ad104047388f6274c13cffe0c6232e238034e46d247e225897039c9e1722e5c22eaf8610aae874c4ad0c06a70d81678b0d2004bcbfdcbbc3c1a2313c38b326b80ac6362f75ffcda3364b6131d19b9a1b6ee52250086ecd92e480b35b7abf7d4c68f1da671570905c2d02030100010282010017cc297e61c18f59614295571dbcd1f4a77d42f5ceff9a85202ddc56eeb4ab5bfc5a145704de6160bc76b156aeb5489ace29af77e9af3af7d6a9d6ecb6f3a5a6bb59dc1e476f9670ba1ee7281b0ad29dbf44ff1a3cec7ee8d0c6b3d16eecbacbf9b734f0cade6d50e915483e18a35070ea0acd867bfb7e1ede36db6e05773f214e475d066131cc140938560a4a9c9ff292835520aba0238470a2b55512fd16bd7e8df24cc4fedb09d7555411f93ff8415c8707bdc51595d0e90e1c31bfab031132b4c8617effedf1590b411d5e08f2d17931ee994d88627b57c7d8b435e9ed036a91eecc077147e9a6d5ea5fd3289114b8194d0296355b455f3dc3bca0565b0102818100b9c1ad292dd66ff2db6da019ec043b61ee54a3cb2f1ca27691475a9ddaea9fc3ab791c149e424532d09128209356ce9f45916750a526e39be6c3a32d3fe3fa230b601999972751ac8c65e7262d894a21c233095ceb1da7c288418292a48dd1d08977f27b7c3229520027156525f016abf935b87b5a6d4ae3156efad2aa247bb902818100c4413f0d73956f6940d27bee64ea5b20dae06a3f206855b201248acf3e6c02be9d0a3533df87d2e11091d594b75343a01d972cf073f17a60b1f7f92e77d5babb9be7edfbe07e60fdadb14bf495ce098e63ef0e815d683ec1ecb962bdfd3ba2b5cd61449eb80f2309a9b6929461e9ea3d2d37948207f05e65a37fbc6d50bae61502818100a6ae62aa3bc65aa7ea3c0158a14eded62e5ce6a8f0ba5a11d8a4d56c263f386304dfe4d19f7cc9c9221bce8d0488f55937bc949f69c26ea4bb3a3b96e3e8b6d07169a72f09d22f588c96f8066afff1743f653a76954703fcebf514ac6f5a0eb678541852b40bf2c5f0fb2118a5253dc2cd196653d1bd9660142084933a370889028181009777d80734bf0ff6c72decb2a8b66bd0e6bd2fa33b0aeba0efdad93b6c6d068d413d00a4e18fbdc530f9ad43135eb321dfd4aebd826ecc49d6f19123391ffef80f3328ed2e6dbbc3ee8b9918d389eabc380ae84215ea800d41fc2ee67d8cca5ed07d92ed811745ae8e8ab784c83136353331e36f9c5afb302cc9488f82304da5028180010bd9d78b6371f7888ed7f64c6ddbd40c366756c6b8eb7a91cd971e7e8c5abd8423f65c5d00e48a03a5d7d032c6d921eaf08c33be5d5f28c883aac674da8917245116bef0ff781f237ee876d3d9d4a2b463031906b0a9cad5988be186eb10b885dce421247ae12335b4fee90e704073f36622b5f1a3c88e072c73010b5c3198"
 
 CREDENTIAL_ISSUER_ID = "Ontario Tech"
@@ -172,10 +169,10 @@ class Blockchain:
         """
         # I intentionally skip signature verification for mining-reward transactions.
         # Those are “system” transactions created by the protocol itself.
-        print("\n🔍 VERIFYING TRANSACTION SIGNATURE")
+        print("\n🔍 VERIFYING TRANSACTION SIGNATURE")#Kamal added logginf for debugging purposes
         
         if transaction.get('sender') == MINING_SENDER:
-            print("✅ Mining transaction - skipping verification")
+            print("✅ Mining transaction - skipping verification")#Kamal added logging for debugging purposes
             return True
 
         sender_public_key = transaction['sender']
@@ -190,17 +187,18 @@ class Blockchain:
             'issue_date': transaction['issue_date']
         })
         
-        print(f"Verification data: {verification_data}")
+        print(f"Verification data: {verification_data}")#Kamal added logging for debugging purposes
 
         try:
             public_key = RSA.import_key(binascii.unhexlify(sender_public_key))
             verifier = PKCS1_v1_5.new(public_key)
             
-            # Must use the SAME hash as the client
+            # I use SHA (as in the classic examples) for signing the transaction payload
             h = SHA.new(json.dumps(verification_data, sort_keys=True).encode('utf8'))
             
             result = verifier.verify(h, binascii.unhexlify(signature))
             
+			#Adding some code for logging and exception handling
             if result:
                 print("✅ SIGNATURE VALID!")
             else:
@@ -390,23 +388,28 @@ def mine():
 def new_credential():
     """
     This route is called by the UI when Ontario Tech issues a new credential.
+
+    - I expect the issuer to be the Ontario Tech public key.
+    - I validate all required fields.
+    - I pass the transaction to the blockchain, which verifies the signature again.
     """
     values = request.get_json()
 
-    # ✅ FIXED: Check for sender_public_key (not sender)
+    
     if values.get('sender_public_key') != ONTARIO_TECH_PUBLIC_KEY:
         return jsonify({'message': 'Unauthorized Issuer'}), 401
 
+	#Kamal modified to Check for sender_public_key (not sender)
     required = ['sender_public_key', 'recipient_public_key', 'credential_type', 
                 'issue_date', 'credential_hash', 'signature']
     if not all(k in values for k in required):
         return jsonify({'message': 'Missing values'}), 400
 
     try:
-        # ✅ FIXED: Map sender_public_key -> sender, recipient_public_key -> recipient
+        # I create a new credential transaction that will be mined into the next block.
         index = blockchain.new_transaction(
-            sender=values['sender_public_key'],      # Map to internal field name
-            recipient=values['recipient_public_key'], # Map to internal field name
+            sender=values['sender_public_key'],      
+            recipient=values['recipient_public_key'], 
             credential_type=values['credential_type'],
             issue_date=values['issue_date'],
             credential_hash=values['credential_hash'],
@@ -419,22 +422,18 @@ def new_credential():
         return jsonify({'message': str(e)}), 400
 
 
-# ✅ Also need to update verify_transaction_signature to handle the field names correctly
+#Kamal modified verify_transaction_signature to handle the field names correctly
 def verify_transaction_signature(self, transaction):
     """
-    Here I verify the RSA digital signature attached to a transaction.
+    This function was developed with the assistance of Claude AI in order to address errors related to data types and formatting
     """
     if transaction.get('sender') == MINING_SENDER:
         return True
 
     sender_public_key = transaction['sender']
     signature = transaction['signature']
-
-    # ✅ CRITICAL: When verifying, we need to reconstruct the ORIGINAL signed data
-    # The client signs: {sender_public_key, recipient_public_key, credential_type, issue_date}
-    # But we store it as: {sender, recipient, credential_type, issue_date, credential_hash, signature}
     
-    # We need to verify against what was ACTUALLY signed by the client
+    # update mapping against what was ACTUALLY signed by the client
     verification_data = OrderedDict({
         'sender_public_key': transaction['sender'],        # Map back
         'recipient_public_key': transaction['recipient'],  # Map back
@@ -456,6 +455,10 @@ def verify_transaction_signature(self, transaction):
         print(f"❌ Signature verification error: {e}")
         return False
 
+#View Blockchain comand
+@app.route('/blockchain')
+def blockchain_page():
+    return render_template('blockchain.html')
 
 @app.route('/credentials/verify', methods=['POST'])
 def verify_credential():
