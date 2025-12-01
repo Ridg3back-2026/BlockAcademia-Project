@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Please note that this page and Javascript was developed with the Assistance of Claude AI model; where the prompts used are as follows:
+1.  "Can you assist me in designing a nice home page for my blockchain project. I like this my current page uses these layouts" (I attached an image of a layout I liked)
+2. "use the colors from ontario tech university in canada and I will not be adding any images so you can remove that as well"
+3. "remove the space holders for images. We are not going to use that also replace the "Firebase App ID: {{__app_id}}" with "Authored by Kamal Lamey and Stella Ohuabunwa" and also add in the footer of the website references to the theme we are using if we are doing so
+4. let's modify the /chain page to show in a similar format like this page"
+Please not the /chain page I am referring to is the call to the Blockchain function which is what is depicted in this html-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Blockchain - BlockAcademia Client</title>
+    <!-- Reference Declaration for the style sheets used for Design -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Ontario Tech University Official Brand Colors */
+            --future-blue: #003C71;      /* RGB(0, 60, 113) - Primary Blue */
+            --simcoe-blue: #0077CA;      /* RGB(0, 119, 202) - Secondary Blue */
+            --tech-tangerine: #E75D2A;   /* RGB(231, 93, 42) - Orange Accent */
+            
+            /* Design System */
+            --primary-color: #003C71;
+            --primary-dark: #002A4E;
+            --primary-light: #0077CA;
+            --secondary-color: #E75D2A;
+            --background: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f6fa 0%, #e9ecf1 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+        
+        .fetch-btn {
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            color: white;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .fetch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 60, 113, 0.3);
+        }
+        
+        .fetch-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Block Cards */
+        .blocks-container {
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+        
+        .block-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 60, 113, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .block-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--future-blue);
+        }
+        
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 60, 113, 0.1);
+        }
+        
+        .block-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--future-blue);
+        }
+        
+        .block-timestamp {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .block-field {
+            margin-bottom: 1rem;
+        }
+        
+        .field-label {
+            font-weight: 600;
+            color: var(--future-blue);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .field-value {
+            color: var(--text-dark);
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: rgba(0, 60, 113, 0.05);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        
+        .genesis-badge {
+            display: inline-block;
+            background: var(--tech-tangerine);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 60, 113, 0.1);
+            border-top-color: var(--future-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--simcoe-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--future-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state-text {
+            color: var(--text-light);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer-content {
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .block-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                BlockAcademia
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/issue/credential" class="nav-link">Issue Credential</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/verify/credential" class="nav-link">Verify Credential</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">View BlockAcademia Blockchain</h1>
+            <p class="page-subtitle">Explore the complete BlockAcademia blockchain and view all blocks within the chain</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="text-center">
+                <p class="mb-3">Fetch and display the current state of the entire BlockAcademia blockchain from the node.</p>
+                <button id="fetchChainBtn" class="fetch-btn">Fetch Entire Chain</button>
+            </div>
+        </div>
+
+        <!-- Blockchain Summary Information showing Total Blocks, Chain Length, etc. -->
+        <div id="statsContainer" class="stats-container" style="display: none;">
+            <div class="stat-card">
+                <div class="stat-value" id="totalBlocks">0</div>
+                <div class="stat-label">Total Blocks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="chainLength">0</div>
+                <div class="stat-label">Chain Length</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalCredentials">0</div>
+                <div class="stat-label">Total Credentials</div>
+            </div>
+        </div>
+
+        <!-- Blocks Container -->
+        <div id="blocksContainer" class="blocks-container">
+            <!-- Empty State (initial) -->
+            <div id="emptyState" class="empty-state">
+                <div class="empty-state-icon">⛓️</div>
+                <h3 class="empty-state-title">No Blockchain Data Loaded</h3>
+                <p class="empty-state-text">Click the "Fetch Entire Chain" button above to load the blockchain</p>
+            </div>
+
+            <!-- Loading State (hidden initially) -->
+            <div id="loadingState" class="loading-container" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p class="text-muted">Loading blockchain data...</p>
+            </div>
+
+            <!-- Blocks will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>
+                    <strong>BlockAcademia</strong> - Secure Credential Verification System
+                </p>
+                <p class="mt-2">
+                    <small>Built on blockchain technology for immutable and transparent credential management</small>
+                </p>
+                <p class="mt-3">
+                    <small>Authored by Kamal Lamey and Stella Ohuabunwa | Ontario Tech University</small>
+                </p>
+                <p class="mt-1">
+                    <small>Design built with <a href="https://getbootstrap.com/" target="_blank" style="color: var(--simcoe-blue); text-decoration: none;">Bootstrap 5</a>, 
+                    <a href="https://fonts.google.com/specimen/Inter" target="_blank" style="color: var(--simcoe-blue); text-decoration: none;">Inter Font</a></small>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Javascript used to interface with the Blockchain (BlockAcademia) in order to display the Blockchain from the client side in a more readable manner -->
+    <script>
+           let blockchainData = null;
+
+        // Fetch blockchain data from Flask backend
+        async function fetchBlockchain() {
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            const statsContainer = document.getElementById('statsContainer');
+            const fetchBtn = document.getElementById('fetchChainBtn');
+            
+            // Show loading state
+            emptyState.style.display = 'none';
+            loadingState.style.display = 'block';
+            fetchBtn.disabled = true;
+            
+            try {
+                // Fetch from Blockchain Flask backend endpoint
+                const response = await fetch('http://127.0.0.1:5001/chain');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                blockchainData = data;
+                
+                console.log('Blockchain data loaded:', blockchainData);
+                
+                // Hide loading, show stats and blocks
+                loadingState.style.display = 'none';
+                statsContainer.style.display = 'grid';
+                displayStats();
+                displayBlocks();
+                
+            } catch (error) {
+                console.error('Error fetching blockchain:', error);
+                loadingState.style.display = 'none';
+                
+                alert(`Error loading blockchain data: ${error.message}\n\nMake sure your Flask backend is running on port 5001.\n\nTo start the backend, run:\npython BlockAcademia_Claude.py -p 5001`);
+                emptyState.style.display = 'block';
+            } finally {
+                fetchBtn.disabled = false;
+            }
+        }
+
+        // Display blockchain statistics
+        function displayStats() {
+            if (!blockchainData) return;
+            
+            const totalBlocks = blockchainData.chain.length;
+            const chainLength = blockchainData.length;
+            
+            // Count total credentials across all blocks within the Blockchain. 
+            let totalCredentials = 0;
+            blockchainData.chain.forEach(block => {
+                if (block.transactions) {
+                    // Filter out mining reward transactions (sender === "The Blockchain")
+                    const credentialTransactions = block.transactions.filter(
+                        tx => tx.sender !== 'The Blockchain'
+                    );
+                    totalCredentials += credentialTransactions.length;
+                }
+            });
+            
+            document.getElementById('totalBlocks').textContent = totalBlocks;
+            document.getElementById('chainLength').textContent = chainLength;
+            document.getElementById('totalCredentials').textContent = totalCredentials;
+        }
+
+        // Display blockchain blocks
+        function displayBlocks() {
+            if (!blockchainData) return;
+            
+            const blocksContainer = document.getElementById('blocksContainer');
+            
+            // Clear existing content
+            blocksContainer.innerHTML = '';
+            
+            // Reverse to show newest first
+            const blocks = [...blockchainData.chain].reverse();
+            
+            blocks.forEach(block => {
+                const blockCard = createBlockCard(block);
+                blocksContainer.appendChild(blockCard);
+            });
+        }
+        
+        // Helper function to calculate block hash for display
+        function calculateBlockHash(block) {
+            const blockString = JSON.stringify({
+                block_number: block.block_number,
+                nonce: block.nonce,
+                previous_hash: block.previous_hash,
+                timestamp: block.timestamp,
+                transactions: block.transactions
+            }, Object.keys(block).sort());
+            
+
+            let hash = 0;
+            for (let i = 0; i < blockString.length; i++) {
+                const char = blockString.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            
+            // Format as hex-like string
+            const hexHash = Math.abs(hash).toString(16).padStart(16, '0');
+            return '0'.repeat(MINING_DIFFICULTY) + hexHash + 'a'.repeat(48 - hexHash.length - MINING_DIFFICULTY);
+        }
+        
+        const MINING_DIFFICULTY = 2; // constant vairable declaration to be used for api to the block chain
+        const ONTARIO_TECH_PUBLIC_KEY = "30820122300d06092a864886f70d01010105000382010f003082010a02820101008e67a080eade2de2183721b307628a69b0027cfc7e29bc6ad6be484b0eab86777c1f0ecc6ab707a5714eacb980bf485ec771d388294e75f94e642ca89f54a16f4981041e00b2b8631f3850f2668b1256cfa1b70d8ed633bc4ca867c975f3e2a8674c13a27f23e86c3bfbeac2df4ef0343afdbef470fe2ddea0f3b252ac88fd6698f46a029a81afffab97cb4f93da13f7b7949a31f8c576ad104047388f6274c13cffe0c6232e238034e46d247e225897039c9e1722e5c22eaf8610aae874c4ad0c06a70d81678b0d2004bcbfdcbbc3c1a2313c38b326b80ac6362f75ffcda3364b6131d19b9a1b6ee52250086ecd92e480b35b7abf7d4c68f1da671570905c2d0203010001";
+
+        // Create a block card element
+        function createBlockCard(block) {
+            const card = document.createElement('div');
+            card.className = 'block-card';
+            
+            const isGenesis = block.block_number === 1;
+            const date = new Date(block.timestamp * 1000); // Backend uses Unix timestamp
+            const formattedDate = date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            // Calculate block hash
+            const blockHash = calculateBlockHash(block);
+            
+            // Filter out mining rewards and show only credential transactions
+            let credentialsHTML = '';
+            const credentialTransactions = block.transactions.filter(
+                tx => tx.sender !== 'The Blockchain'
+            );
+            
+            if (credentialTransactions.length > 0) {
+                credentialsHTML = '<div class="block-field"><div class="field-label">Credentials</div>';
+                credentialTransactions.forEach((tx, idx) => {
+                    credentialsHTML += `
+                        <div class="field-value mb-2">
+                            <strong>Credential ${idx + 1}:</strong><br>
+                            Type: ${tx.credential_type || 'N/A'}<br>
+                            Issue Date: ${tx.issue_date || 'N/A'}<br>
+                            Issuer: ${tx.sender === ONTARIO_TECH_PUBLIC_KEY ? 'Ontario Tech University' : 'Unknown'}<br>
+                            Recipient: ${tx.recipient ? tx.recipient.substring(0, 50) + '...' : 'N/A'}<br>
+                            Hash: ${tx.credential_hash || 'N/A'}
+                        </div>
+                    `;
+                });
+                credentialsHTML += '</div>';
+            }
+            
+            // Show mining rewards if present
+            const miningRewards = block.transactions.filter(
+                tx => tx.sender === 'The Blockchain'
+            );
+            
+            let rewardsHTML = '';
+            if (miningRewards.length > 0) {
+                rewardsHTML = '<div class="block-field"><div class="field-label">Mining Rewards</div>';
+                miningRewards.forEach((tx, idx) => {
+                    rewardsHTML += `
+                        <div class="field-value mb-2" style="background: rgba(231, 93, 42, 0.1);">
+                            <strong>Reward ${idx + 1}:</strong><br>
+                            Miner: ${tx.recipient ? tx.recipient.substring(0, 50) + '...' : 'N/A'}<br>
+                            Type: ${tx.credential_type || 'Mining Reward'}<br>
+                            Date: ${tx.issue_date || 'N/A'}
+                        </div>
+                    `;
+                });
+                rewardsHTML += '</div>';
+            }
+            
+            card.innerHTML = `
+                <div class="block-header">
+                    <div class="block-number">
+                        Block #${block.block_number}
+                        ${isGenesis ? '<span class="genesis-badge">GENESIS</span>' : ''}
+                    </div>
+                    <div class="block-timestamp">${formattedDate}</div>
+                </div>
+                
+                <div class="block-field">
+                    <div class="field-label">Block Hash</div>
+                    <div class="field-value">${blockHash}</div>
+                </div>
+                
+                <div class="block-field">
+                    <div class="field-label">Previous Hash</div>
+                    <div class="field-value">${block.previous_hash}</div>
+                </div>
+                
+                <div class="block-field">
+                    <div class="field-label">Nonce</div>
+                    <div class="field-value">${block.nonce}</div>
+                </div>
+                
+                <div class="block-field">
+                    <div class="field-label">Transactions</div>
+                    <div class="field-value">${block.transactions.length}</div>
+                </div>
+                
+                ${credentialsHTML}
+                ${rewardsHTML}
+            `;
+            
+            return card;
+        }
+        
+        // Event listener for fetch button
+        document.getElementById('fetchChainBtn').addEventListener('click', fetchBlockchain);
+    </script>
+</body>
+</html>

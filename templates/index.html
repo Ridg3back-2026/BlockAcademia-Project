@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Please note that this page and Javascript was developed with the Assistance of Claude AI model; where the prompts used are as follows:
+1.  "Can you assist me in designing a nice home page for my blockchain project. I like this my current page uses these layouts" (I attached an image of a layout I liked)
+2. "use the colors from ontario tech university in canada and I will not be adding any images so you can remove that as well"
+3. "remove the space holders for images. We are not going to use that also replace the "Firebase App ID: {{__app_id}}" with "Authored by Kamal Lamey and Stella Ohuabunwa" and also add in the footer of the website references to the theme we are using if we are doing so"-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockAcademia Client - Credential Verification on Blockchain</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styling Code -->
+    <style>
+        :root {
+            /* Ontario Tech University Official Brand Colors */
+            --future-blue: #003C71;      /* RGB(0, 60, 113) - Primary Blue */
+            --simcoe-blue: #0077CA;      /* RGB(0, 119, 202) - Secondary Blue */
+            --tech-tangerine: #E75D2A;   /* RGB(231, 93, 42) - Orange Accent */
+            
+            /* Design System */
+            --primary-color: #003C71;
+            --primary-dark: #002A4E;
+            --primary-light: #0077CA;
+            --secondary-color: #E75D2A;
+            --background: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f6fa 0%, #e9ecf1 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        .firebase-id {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0, 60, 113, 0.1), rgba(0, 119, 202, 0.1));
+            color: var(--future-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 60, 113, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--future-blue);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--future-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-btn {
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .feature-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 60, 113, 0.3);
+            color: white;
+        }
+        
+        /* Info Cards */
+        .info-section {
+            margin-top: 4rem;
+            margin-bottom: 3rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .info-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-card p {
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        /* How It Works Section */
+        .how-it-works {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .how-it-works h2 {
+            text-align: center;
+            color: var(--future-blue);
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .step {
+            display: flex;
+            align-items: start;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            background: rgba(0, 60, 113, 0.05);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--future-blue), var(--simcoe-blue));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+        
+        .step-content h4 {
+            color: var(--future-blue);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .step-content p {
+            color: var(--text-light);
+            margin: 0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer-content {
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .feature-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                BlockAcademia
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/issue/credential" class="nav-link">Issue Credential</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/verify/credential" class="nav-link">Verify Credential</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">BlockAcademia Client</h1>
+            <p class="hero-subtitle">Secure Credential Verification on the Blockchain</p>
+            <div class="firebase-id">
+                Authored by Kamal Lamey and Stella Ohuabunwa
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Feature Cards -->
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="feature-card">
+                    <h3 class="feature-title">Issue Credentials</h3>
+                    <p class="feature-description">
+                        Create and issue verifiable credentials on the blockchain. Securely store academic records, 
+                        certificates, and achievements that are tamper-proof and permanently accessible.
+                    </p>
+                    <a href="/issue/credential" class="feature-btn">
+                        Issue New Credential
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="feature-card">
+                    <h3 class="feature-title">Verify Credentials</h3>
+                    <p class="feature-description">
+                        Instantly verify the authenticity of credentials using cryptographic hash verification. 
+                        Check if credentials exist on the blockchain and validate the issuer's identity.
+                    </p>
+                    <a href="/verify/credential" class="feature-btn">
+                        Verify Credential
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-12 mb-4">
+                <div class="feature-card">
+                    <h3 class="feature-title">View Blockchain</h3>
+                    <p class="feature-description">
+                        Explore the complete blockchain and view all blocks in the chain. Gain transparency 
+                        into the entire network and see how credentials are stored and validated.
+                    </p>
+                    <a href="/blockchain" class="feature-btn">
+                        Explore Blockchain
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-section">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="info-card">
+                        <h3>Immutable Records</h3>
+                        <p>Credentials stored on the blockchain cannot be altered or deleted</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="info-card">
+                        <h3>Decentralized</h3>
+                        <p>No single point of failure or control in the verification system</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="info-card">
+                        <h3>Instant Verification</h3>
+                        <p>Verify credentials in seconds with cryptographic proof</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Credential Creation</h4>
+                    <p>Educational institutions or authorized issuers create a credential with student details and achievements. The data is hashed using SHA-256 encryption.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Blockchain Storage</h4>
+                    <p>The credential hash and issuer's public key are recorded in a new block and added to the blockchain, creating a permanent, tamper-proof record.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Verification Process</h4>
+                    <p>Anyone can verify a credential by providing the hash and issuer's public key. The system checks the blockchain to confirm authenticity.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Trust & Transparency</h4>
+                    <p>The decentralized nature ensures no single entity can manipulate records, providing complete transparency and trust in the verification process.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>
+                    <strong>BlockAcademia</strong> - Secure Credential Verification System
+                </p>
+                <p class="mt-2">
+                    <small>Built on blockchain technology for immutable and transparent credential management</small>
+                </p>
+                <p class="mt-3">
+                    <small>Authored by Kamal Lamey and Stella Ohuabunwa | Ontario Tech University</small>
+                </p>
+                <p class="mt-1">
+                    <small>Design built with <a href="https://getbootstrap.com/" target="_blank" style="color: var(--simcoe-blue); text-decoration: none;">Bootstrap 5</a>, 
+                    <a href="https://fonts.google.com/specimen/Inter" target="_blank" style="color: var(--simcoe-blue); text-decoration: none;">Inter Font</a>, 
+                    and <a href="https://fontawesome.com/" target="_blank" style="color: var(--simcoe-blue); text-decoration: none;">Font Awesome</a></small>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
